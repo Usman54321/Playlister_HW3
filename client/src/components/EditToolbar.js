@@ -27,6 +27,19 @@ function EditToolbar() {
     if (store.isListNameEditActive) {
         editStatus = true;
     }
+
+    function handleAddSong() {
+        // TODO: ADD A NEW SONG TO THE CURRENT LIST
+    }
+    
+    // If there is no current list, then disable the buttons
+    let hasList = store.currentList !== null;
+    if (!hasList) {
+        return (
+            <></>
+        )
+    }
+
     return (
         <span id="edit-toolbar">
             <input
@@ -35,6 +48,7 @@ function EditToolbar() {
                 disabled={editStatus}
                 value="+"
                 className={enabledButtonClass}
+                onClick={handleAddSong}
             />
             <input
                 type="button"

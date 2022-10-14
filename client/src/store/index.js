@@ -1,6 +1,8 @@
 import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
 import api from '../api'
+
+
 export const GlobalStoreContext = createContext({});
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -18,6 +20,7 @@ export const GlobalStoreActionType = {
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
+    MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -106,6 +109,7 @@ export const useGlobalStore = () => {
                 return store;
         }
     }
+
     // THESE ARE THE FUNCTIONS THAT WILL UPDATE OUR STORE AND
     // DRIVE THE STATE OF THE APPLICATION. WE'LL CALL THESE IN 
     // RESPONSE TO EVENTS INSIDE OUR COMPONENTS.
@@ -116,10 +120,10 @@ export const useGlobalStore = () => {
         async function asyncChangeListName(id) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
-                let playlist = response.data.playist;
+                let playlist = response.data.playlist;
                 playlist.name = newName;
                 async function updateList(playlist) {
-                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    response = await api.updateListName(playlist._id, playlist);
                     if (response.data.success) {
                         async function getListPairs(playlist) {
                             response = await api.getPlaylistPairs();
@@ -186,6 +190,7 @@ export const useGlobalStore = () => {
         }
         asyncSetCurrentList(id);
     }
+    
     store.getPlaylistSize = function() {
         return store.currentList.songs.length;
     }
@@ -201,6 +206,50 @@ export const useGlobalStore = () => {
         storeReducer({
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
             payload: null
+        });
+    }
+
+    // THIS FUNCTION CREATES A NEW LIST
+    store.createNewList = function () {
+        async function asyncCreateNewList() {
+            let payload = {
+                name: "Untitled" + store.newListCounter,
+                songs: []
+            }
+            let response = await api.createNewList(payload);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                storeReducer({
+                    type: GlobalStoreActionType.CREATE_NEW_LIST,
+                    payload: playlist
+                });
+                store.history.push("/playlist/" + playlist._id);
+            }
+        }
+        asyncCreateNewList();
+    }
+
+    // THIS FUNCTION MARKS A LIST FOR DELETION
+    store.markListForDeletion = function (id) {
+        async function asyncMarkListForDeletion(id) {
+            let response = await api.deleteList(id);
+            if (response.data.success) {
+                storeReducer({
+                    type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
+                    payload: null
+                });
+                store.history.push("/");
+                store.loadIdNamePairs();
+            }
+        }
+        asyncMarkListForDeletion(id);
+
+    }
+
+    store.setIsListNameEditActive = function (active) {
+        storeReducer({
+            type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
+            payload: active
         });
     }
 

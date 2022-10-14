@@ -6,6 +6,10 @@ $nodeVersion = $nodeVersion -replace "v", ""
 # debug print out the node version
 # Write-Host "Node version: $nodeVersion"
 
+# Change the directory to the folder where the script is located
+$scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Definition
+Set-Location $scriptPath
+
 if ($nodeVersion -ge "17.0.0") {
     $env:NODE_OPTIONS = "--openssl-legacy-provider"
     Write-Host "Node version is greater than or equal to 17.0.0"
