@@ -46,6 +46,7 @@ function ListCard(props) {
             toggleEdit();
         }
     }
+
     function handleUpdateText(event) {
         setText(event.target.value );
     }
@@ -54,8 +55,6 @@ function ListCard(props) {
         event.stopPropagation();
         let id = event.target.id.substring("delete-list-".length);
         store.markListForDeletion(id);
-        // reload the lists
-        store.loadIdNamePairs();
     }
 
     let selectClass = "unselected-list-card";

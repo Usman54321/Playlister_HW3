@@ -8,7 +8,6 @@ const Playlist = require('../models/playlist-model')
 */
 createPlaylist = (req, res) => {
     const body = req.body;
-    console.log("createPlaylist body: " + body);
 
     if (!body) {
         return res.status(400).json({
@@ -89,7 +88,6 @@ getPlaylistPairs = async (req, res) => {
 
 updatePlaylist = async (req, res) => {
     const body = req.body;
-    console.log("updatePlaylist body: " + body);
     if (!body) {
         return res.status(400).json({
             success: false,

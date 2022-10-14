@@ -21,6 +21,7 @@ export const GlobalStoreActionType = {
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
+    DELETE_LIST: "DELETE_LIST",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -34,7 +35,8 @@ export const useGlobalStore = () => {
         idNamePairs: [],
         currentList: null,
         newListCounter: 0,
-        listNameActive: false
+        listNameActive: false,
+        listToDelete: null,
     });
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -82,9 +84,10 @@ export const useGlobalStore = () => {
             case GlobalStoreActionType.MARK_LIST_FOR_DELETION: {
                 return setStore({
                     idNamePairs: store.idNamePairs,
-                    currentList: null,
+                    currentList: store.currentList,
                     newListCounter: store.newListCounter,
-                    listNameActive: false
+                    listNameActive: false,
+                    listToDelete: payload
                 });
             }
             // UPDATE A LIST
@@ -190,7 +193,7 @@ export const useGlobalStore = () => {
         }
         asyncSetCurrentList(id);
     }
-    
+
     store.getPlaylistSize = function() {
         return store.currentList.songs.length;
     }
@@ -229,21 +232,37 @@ export const useGlobalStore = () => {
         asyncCreateNewList();
     }
 
+    store.showDeleteListModal = () => {
+        let modal = document.getElementById("delete-list-modal");
+        modal.classList.add("is-visible");
+    }
+
+    store.hideDeleteListModal = () => {
+        let modal = document.getElementById("delete-list-modal");
+        modal.classList.remove("is-visible");
+    }
+
     // THIS FUNCTION MARKS A LIST FOR DELETION
     store.markListForDeletion = function (id) {
-        async function asyncMarkListForDeletion(id) {
+        console.log("MARKING LIST " + id + " FOR DELETION");
+        storeReducer({
+            type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
+            payload: id
+        });
+        store.showDeleteListModal();
+    }
+
+    // THIS FUNCTION DELETES A LIST
+    store.deleteList = function () {
+        async function asyncDeleteList(id) {
             let response = await api.deleteList(id);
             if (response.data.success) {
-                storeReducer({
-                    type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
-                    payload: null
-                });
-                store.history.push("/");
                 store.loadIdNamePairs();
+                store.history.push("/");
             }
         }
-        asyncMarkListForDeletion(id);
-
+        asyncDeleteList(store.listToDelete);
+        store.hideDeleteListModal();
     }
 
     store.setIsListNameEditActive = function (active) {
