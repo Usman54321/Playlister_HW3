@@ -15,9 +15,6 @@ function PlaylistCards() {
     store.history = useHistory();
 
     if (!store.currentList) {
-        console.log("No current list");
-        // Send the user back to the home page
-        window.location.replace("/");
         return (
             <></>
         )

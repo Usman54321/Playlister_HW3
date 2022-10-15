@@ -15,7 +15,7 @@ const ListSelector = () => {
 
     useEffect(() => {
         store.loadIdNamePairs();
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     function handleCreateNewList() {
         store.createNewList();

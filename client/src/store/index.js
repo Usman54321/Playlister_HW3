@@ -23,7 +23,7 @@ export const GlobalStoreActionType = {
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
-    DELETE_LIST: "DELETE_LIST",
+    BLANKET_UPDATE: "BLANKET_UPDATE",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -42,6 +42,7 @@ export const useGlobalStore = () => {
         songToDelete: null,
         isDragging: false,
         draggedTo: false,
+        isModalOpen: false,
     });
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -60,6 +61,7 @@ export const useGlobalStore = () => {
             }
             // STOP EDITING THE CURRENT LIST
             case GlobalStoreActionType.CLOSE_CURRENT_LIST: {
+                tps.clearAllTransactions();
                 return setStore({
                     idNamePairs: store.idNamePairs,
                     currentList: null,
@@ -113,6 +115,13 @@ export const useGlobalStore = () => {
                     listNameActive: true
                 });
             }
+
+            // BLANKET UPDATE
+            // case GlobalStoreActionType.BLANKET_UPDATE: {
+            //     return setStore({
+            //         newListCounter: store.newListCounter
+            //     });
+            // }
 
             default:
                 return store;
@@ -261,12 +270,14 @@ export const useGlobalStore = () => {
     store.showDeleteSongModal = () => {
         let modal = document.getElementById("delete-song-modal");
         modal.classList.add("is-visible");
+        store.isModalOpen = true;
     }
 
     store.hideDeleteSongModal = () => {
         let modal = document.getElementById("delete-song-modal");
         modal.classList.remove("is-visible");
         document.getElementById("delete-song-span").innerHTML = "";
+        store.isModalOpen = false;
     }
 
     store.markSongForDeletion = (num) => {
@@ -341,17 +352,32 @@ export const useGlobalStore = () => {
     store.addSongTransaction = function () {
         let transaction = new AddSong_Transaction(store);
         tps.addTransaction(transaction);
+        // Blanket Update
+        storeReducer({
+            type: GlobalStoreActionType.BLANKET_UPDATE,
+            payload: null
+        });
     }
 
     store.deleteSongTransaction = function () {
         let transaction = new DeleteSong_Transaction(store, store.songToDelete);
         tps.addTransaction(transaction);
+        // Blanket Update
+        storeReducer({
+            type: GlobalStoreActionType.BLANKET_UPDATE,
+            payload: null
+        });
     }
 
     // THIS FUNCTION ADDS A MoveSong_Transaction TO THE TRANSACTION STACK
     store.addMoveSongTransaction = (start, end) => {
         let transaction = new MoveSong_Transaction(store, start, end);
         tps.addTransaction(transaction);
+        // Blanket Update
+        storeReducer({
+            type: GlobalStoreActionType.BLANKET_UPDATE,
+            payload: null
+        });
     }
 
     // THIS FUNCTION MOVES A SONG IN THE CURRENT LIST FROM
@@ -384,6 +410,24 @@ export const useGlobalStore = () => {
             }
         }
         asyncAddSongAtIndex(store.currentList._id, index, song);
+    }
+
+    store.canUndo = function () {
+        if (store.hasList()) {
+            return tps.hasTransactionToUndo();
+        }
+        return false;
+    }
+
+    store.canRedo = function () {
+        if (store.hasList()) {
+            return tps.hasTransactionToRedo();
+        }
+        return false;
+    }
+
+    store.hasList = function () {
+        return store.currentList !== null;
     }
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT

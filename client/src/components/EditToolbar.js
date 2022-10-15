@@ -16,16 +16,16 @@ function EditToolbar() {
     let redoClass = "playlister-button";
     let closeClass = "playlister-button";
     // If there is no current list, then disable the buttons
-    let hasList = store.currentList !== null;
-    if (!hasList) {
-        return (
-            <></>
-        )
-    }
-    if (!hasList) addSongClass += "-disabled";
-    if (!hasList) undoClass += "-disabled";
-    if (!hasList) redoClass += "-disabled";
-    if (!hasList) closeClass += "-disabled";
+    // let hasList = store.currentList !== null;
+    // if (!hasList) {
+    //     return (
+    //         <></>
+    //     )
+    // }
+    if (!store.hasList()) addSongClass += "-disabled";
+    if (!store.canUndo()) undoClass += "-disabled";
+    if (!store.canRedo()) redoClass += "-disabled";
+    if (!store.hasList()) closeClass += "-disabled";
 
     function handleUndo() {
         store.undo();
@@ -47,13 +47,12 @@ function EditToolbar() {
         store.addSongTransaction();
     }
 
-
     return (
         <span id="edit-toolbar">
             <input
                 type="button"
                 id='add-song-button'
-                disabled={editStatus || !hasList}
+                disabled={editStatus || !store.hasList()}
                 value="+"
                 className={addSongClass}
                 onClick={handleAddSong}
@@ -61,7 +60,7 @@ function EditToolbar() {
             <input
                 type="button"
                 id='undo-button'
-                disabled={editStatus || !hasList}
+                disabled={editStatus || !store.canUndo()}
                 value="⟲"
                 className={undoClass}
                 onClick={handleUndo}
@@ -69,7 +68,7 @@ function EditToolbar() {
             <input
                 type="button"
                 id='redo-button'
-                disabled={editStatus || !hasList}
+                disabled={editStatus || !store.canRedo()}
                 value="⟳"
                 className={redoClass}
                 onClick={handleRedo}
@@ -77,7 +76,7 @@ function EditToolbar() {
             <input
                 type="button"
                 id='close-button'
-                disabled={editStatus || !hasList}
+                disabled={editStatus || !store.hasList()}
                 value="&#x2715;"
                 className={closeClass}
                 onClick={handleClose}
