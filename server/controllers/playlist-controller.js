@@ -200,6 +200,41 @@ deleteSong = async (req, res) => {
     })
 }
 
+moveSong = async (req, res) => {
+    const body = req.body;
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            error: 'You must provide a Song',
+        })
+    }
+
+    Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
+        if (err) {
+            return res.status(404).json({
+                err,
+                message: 'Playlist not found!',
+            })
+        }
+        let song = playlist.songs.splice(body.oldIndex, 1);
+        playlist.songs.splice(body.newIndex, 0, song[0]);
+        playlist.save()
+            .then(() => {
+                return res.status(200).json({
+                    success: true,
+                    id: playlist._id,
+                    message: 'Song moved!',
+                })
+            })
+            .catch(error => {
+                return res.status(404).json({
+                    error,
+                    message: 'Song not moved!',
+                })
+            })
+    })
+}
+
 module.exports = {
     createPlaylist,
     getPlaylists,
@@ -209,4 +244,5 @@ module.exports = {
     deletePlaylist,
     addSong,
     deleteSong,
+    moveSong,
 }

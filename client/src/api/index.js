@@ -29,6 +29,7 @@ export const updateListName = (id, payload) => api.put(`/playlist/${id}`, payloa
 export const deleteList = (id) => api.delete(`/playlist/${id}`)
 export const addSong = (id, payload) => api.put(`/playlist/${id}/addSong`, payload)
 export const deleteSong = (id, payload) => api.put(`/playlist/${id}/deleteSong`, payload)
+export const moveSong = (id, payload) => api.put(`/playlist/${id}/moveSong`, payload)
 
 
 const apis = {
@@ -39,7 +40,8 @@ const apis = {
     updateListName,
     deleteList,
     addSong,
-    deleteSong
+    deleteSong,
+    moveSong
 }
 
 export default apis

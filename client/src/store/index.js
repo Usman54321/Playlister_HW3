@@ -3,6 +3,7 @@ import jsTPS from '../common/jsTPS'
 import api from '../api'
 import AddSong_Transaction from '../transactions/AddSong_Transaction';
 import DeleteSong_Transaction from '../transactions/DeleteSong_Transaction';
+import MoveSong_Transaction from '../transactions/MoveSong_Transaction';
 
 export const GlobalStoreContext = createContext({});
 /*
@@ -39,6 +40,8 @@ export const useGlobalStore = () => {
         listNameActive: false,
         listToDelete: null,
         songToDelete: null,
+        isDragging: false,
+        draggedTo: false,
     });
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -338,6 +341,29 @@ export const useGlobalStore = () => {
     store.deleteSongTransaction = function () {
         let transaction = new DeleteSong_Transaction(store, store.songToDelete);
         tps.addTransaction(transaction);
+    }
+
+    // THIS FUNCTION ADDS A MoveSong_Transaction TO THE TRANSACTION STACK
+    store.addMoveSongTransaction = (start, end) => {
+        let transaction = new MoveSong_Transaction(store, start, end);
+        tps.addTransaction(transaction);
+    }
+
+    // THIS FUNCTION MOVES A SONG IN THE CURRENT LIST FROM
+    // start TO end AND ADJUSTS ALL OTHER ITEMS ACCORDINGLY
+    store.moveSong = (start, end) => {
+        async function asyncMoveSong(id, start, end) {
+            let payload = {
+                oldIndex: start,
+                newIndex: end
+            }
+            let response = await api.moveSong(id, payload);
+            if (response.data.success) {
+                store.setCurrentList(store.currentList._id);
+                store.history.push("/playlist/" + store.currentList._id);
+            }
+        }
+        asyncMoveSong(store.currentList._id, start, end);
     }
 
 
