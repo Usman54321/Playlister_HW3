@@ -2,6 +2,7 @@ import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
 import api from '../api'
 import AddSong_Transaction from '../transactions/AddSong_Transaction';
+import DeleteSong_Transaction from '../transactions/DeleteSong_Transaction';
 
 export const GlobalStoreContext = createContext({});
 /*
@@ -254,6 +255,25 @@ export const useGlobalStore = () => {
         modal.classList.remove("is-visible");
     }
 
+    store.showDeleteSongModal = () => {
+        let modal = document.getElementById("delete-song-modal");
+        modal.classList.add("is-visible");
+    }
+
+    store.hideDeleteSongModal = () => {
+        let modal = document.getElementById("delete-song-modal");
+        modal.classList.remove("is-visible");
+        document.getElementById("delete-song-span").innerHTML = "";
+    }
+
+    store.markSongForDeletion = (num) => {
+        store.songToDelete = num;
+        let song = store.currentList.songs[num];
+        let name = song.title;
+        document.getElementById("delete-song-span").innerHTML = name;
+        store.showDeleteSongModal();
+    }
+
     // THIS FUNCTION MARKS A LIST FOR DELETION
     store.markListForDeletion = function (id) {
         console.log("MARKING LIST " + id + " FOR DELETION");
@@ -298,11 +318,28 @@ export const useGlobalStore = () => {
         asyncAddSong(newSong);
     }
 
+    store.deleteSong = function (num) {
+        async function asyncDeleteSong(id, num) {
+            let response = await api.deleteSong(id, num);
+            if (response.data.success) {
+                store.setCurrentList(store.currentList._id);
+                store.history.push("/playlist/" + store.currentList._id);
+            }
+        }
+        asyncDeleteSong(store.currentList._id, num);
+        store.hideDeleteSongModal();
+    }
 
     store.addSongTransaction = function () {
         let transaction = new AddSong_Transaction(store);
         tps.addTransaction(transaction);
     }
+
+    store.deleteSongTransaction = function () {
+        let transaction = new DeleteSong_Transaction(store, store.songToDelete);
+        tps.addTransaction(transaction);
+    }
+
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
     return { store, storeReducer };
