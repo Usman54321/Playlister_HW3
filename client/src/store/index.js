@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
 import api from '../api'
-
+import AddSong_Transaction from '../transactions/AddSong_Transaction';
 
 export const GlobalStoreContext = createContext({});
 /*
@@ -37,6 +37,7 @@ export const useGlobalStore = () => {
         newListCounter: 0,
         listNameActive: false,
         listToDelete: null,
+        songToDelete: null,
     });
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -108,6 +109,7 @@ export const useGlobalStore = () => {
                     listNameActive: true
                 });
             }
+
             default:
                 return store;
         }
@@ -280,6 +282,26 @@ export const useGlobalStore = () => {
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
             payload: active
         });
+    }
+
+    // THIS FUNCTION ADDS A SONG TO THE CURRENT LIST
+    store.addSong = function () {
+        // Make the api call to add the song to the list
+        async function asyncAddSong(song) {
+            let response = await api.addSong(store.currentList._id, song);
+            if (response.data.success) {
+                store.setCurrentList(store.currentList._id);
+                store.history.push("/playlist/" + store.currentList._id);
+            }
+        }
+        let newSong = { title: "Untitled", artist: "Unknown", youTubeId: "dQw4w9WgXcQ" };
+        asyncAddSong(newSong);
+    }
+
+
+    store.addSongTransaction = function () {
+        let transaction = new AddSong_Transaction(store);
+        tps.addTransaction(transaction);
     }
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT

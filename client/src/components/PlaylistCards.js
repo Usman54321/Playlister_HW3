@@ -12,6 +12,12 @@ function PlaylistCards() {
     const { store } = useContext(GlobalStoreContext);
     store.history = useHistory();
 
+    if (!store.currentList || !store.currentList.songs) {
+        return (
+            <></>
+        )
+    }
+
     return (
         <div id="playlist-cards">
         {

@@ -29,7 +29,7 @@ function EditToolbar() {
     }
 
     function handleAddSong() {
-        // TODO: ADD A NEW SONG TO THE CURRENT LIST
+        store.addSongTransaction();
     }
     
     // If there is no current list, then disable the buttons
