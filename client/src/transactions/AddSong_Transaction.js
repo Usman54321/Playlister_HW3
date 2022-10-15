@@ -8,9 +8,10 @@ export default class AddSong_Transaction extends jsTPS {
 
     doTransaction() {
         this.store.addSong();
+        this.id = this.store.currentList.songs.length - 1;
     }
 
     undoTransaction() {
-        this.store.removeSong(this.id, this.song);
+        this.store.deleteSong(this.id);
     }
 }

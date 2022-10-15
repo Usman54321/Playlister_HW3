@@ -13,7 +13,7 @@ export default class DeleteSong_Transaction extends jsTPS {
     }
     
     undoTransaction() {
-        this.store.addSpecificSong(this.song, this.id);
+        this.store.addSongAtIndex(this.id, this.song);
         console.log("Added back the Song " + JSON.stringify(this.song) + " at " + this.id)
     }
 }

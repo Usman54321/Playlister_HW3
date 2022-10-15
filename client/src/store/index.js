@@ -323,14 +323,19 @@ export const useGlobalStore = () => {
 
     store.deleteSong = function (num) {
         async function asyncDeleteSong(id, num) {
-            let response = await api.deleteSong(id, num);
+            let payload = {
+                num: num
+            }
+            let response = await api.deleteSong(id, payload);
             if (response.data.success) {
                 store.setCurrentList(store.currentList._id);
                 store.history.push("/playlist/" + store.currentList._id);
             }
         }
+        let songToReturn = store.currentList.songs[num];
         asyncDeleteSong(store.currentList._id, num);
         store.hideDeleteSongModal();
+        return songToReturn;
     }
 
     store.addSongTransaction = function () {
@@ -366,6 +371,20 @@ export const useGlobalStore = () => {
         asyncMoveSong(store.currentList._id, start, end);
     }
 
+    store.addSongAtIndex = function (index, song) {
+        async function asyncAddSongAtIndex(id, index, song) {
+            let payload = {
+                index: index,
+                song: song
+            }
+            let response = await api.addSongAtIndex(id, payload);
+            if (response.data.success) {
+                store.setCurrentList(store.currentList._id);
+                store.history.push("/playlist/" + store.currentList._id);
+            }
+        }
+        asyncAddSongAtIndex(store.currentList._id, index, song);
+    }
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
     return { store, storeReducer };

@@ -3,11 +3,11 @@ import { GlobalStoreContext } from "../store";
 
 function DeleteSongModal() {
     const { store } = useContext(GlobalStoreContext);
-    let name = "";
-    if (store.songToDelete) {
-        name = store.currentList.songs[store.songToDelete].title;
-        console.log("name: " + name);
-    }
+    // let name = "";
+    // if (store.songToDelete) {
+    //     name = store.currentList.songs[store.songToDelete].title;
+    //     // console.log("name: " + name);
+    // }
 
     function deleteSongCallback() {
         store.deleteSongTransaction();
@@ -28,7 +28,7 @@ function DeleteSongModal() {
                 </div>
                 <div className="modal-center">
                     <div className="modal-center-content">
-                        Are you sure you wish to permanently remove <span id="delete-song-span">{name}</span> from the playlist?
+                        Are you sure you wish to permanently remove <span id="delete-song-span"></span> from the playlist?
                     </div>
                 </div>
                 <div className="modal-south">
