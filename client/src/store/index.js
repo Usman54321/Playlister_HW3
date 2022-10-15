@@ -161,16 +161,26 @@ export const useGlobalStore = () => {
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
     store.loadIdNamePairs = function () {
         async function asyncLoadIdNamePairs() {
-            const response = await api.getPlaylistPairs();
-            if (response.data.success) {
-                let pairsArray = response.data.idNamePairs;
+            try {
+                const response = await api.getPlaylistPairs();
+                if (response.data.success) {
+                    let pairsArray = response.data.idNamePairs;
+                    storeReducer({
+                        type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                        payload: pairsArray
+                    });
+                }
+                else {
+                    console.log("API FAILED TO GET THE LIST PAIRS");
+                }
+            }
+            catch (e) {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+                // Set idNamePairs to empty array
                 storeReducer({
                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-                    payload: pairsArray
+                    payload: []
                 });
-            }
-            else {
-                console.log("API FAILED TO GET THE LIST PAIRS");
             }
         }
         asyncLoadIdNamePairs();
@@ -194,7 +204,7 @@ export const useGlobalStore = () => {
         asyncSetCurrentList(id);
     }
 
-    store.getPlaylistSize = function() {
+    store.getPlaylistSize = function () {
         return store.currentList.songs.length;
     }
     store.undo = function () {
