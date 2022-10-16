@@ -288,7 +288,7 @@ editSong = async (req, res) => {
                 message: 'Playlist not found!',
             })
         }
-        console.log("Editing song at index " + body.index + " to " + JSON.stringify(body.song));
+        // console.log("Editing song at index " + body.index + " to " + JSON.stringify(body.song));
         playlist.songs[body.index] = body.song;
         playlist.save()
             .then(() => {
