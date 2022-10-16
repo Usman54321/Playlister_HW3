@@ -17,11 +17,11 @@ function PlaylistCards() {
 
     function handleKeyPress(e) {
         if ((e.key === "z" || e.key === 'Z') && e.ctrlKey) {
-            if (!store.isModalOpen)
-                store.undo();
+            if (!store.hasModalOpen())
+                document.querySelector("#undo-button").click();
         } else if ((e.key === "y" || e.key === 'Y') && e.ctrlKey) {
-            if (!store.isModalOpen)
-                store.redo();
+            if (!store.hasModalOpen())
+                document.querySelector("#redo-button").click();
         }
     }
 

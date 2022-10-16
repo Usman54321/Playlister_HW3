@@ -247,6 +247,7 @@ addSongAtIndex = async (req, res) => {
 
     Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
         if (err) {
+            console.log("Error in addSongAtIndex " + err + " " + req.params.id);
             return res.status(404).json({
                 err,
                 message: 'Playlist not found!',
@@ -262,6 +263,7 @@ addSongAtIndex = async (req, res) => {
                 })
             })
             .catch(error => {
+                console.log("Error in addSongAtIndex: " + error + "\nReturning 404");
                 return res.status(404).json({
                     error,
                     message: 'Song not added!',

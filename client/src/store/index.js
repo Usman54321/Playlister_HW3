@@ -487,6 +487,11 @@ export const useGlobalStore = () => {
         return store.currentList !== null;
     }
 
+    store.hasModalOpen = function () {
+        return store.isModalOpen;
+    }
+
+
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
     return { store, storeReducer };
 }
