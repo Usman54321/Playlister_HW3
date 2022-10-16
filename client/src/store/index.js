@@ -24,7 +24,6 @@ export const GlobalStoreActionType = {
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
-    // BLANKET_UPDATE: "BLANKET_UPDATE",
     MODAL_CHANGE: "MODAL_CHANGE",
     MARK_SONG_FOR_EDIT: "MARK_SONG_FOR_EDIT",
     MARK_SONG_FOR_DELETE: "MARK_SONG_FOR_DELETE",
@@ -207,7 +206,7 @@ export const useGlobalStore = () => {
                     songToEdit: store.songToEdit,
                 });
             }
-
+            
             default:
                 return store;
         }
@@ -496,21 +495,11 @@ export const useGlobalStore = () => {
     store.addSongTransaction = function () {
         let transaction = new AddSong_Transaction(store);
         tps.addTransaction(transaction);
-        // Blanket Update
-        // storeReducer({
-        //     type: GlobalStoreActionType.BLANKET_UPDATE,
-        //     payload: null
-        // });
     }
 
     store.deleteSongTransaction = function () {
         let transaction = new DeleteSong_Transaction(store, store.songToDelete);
         tps.addTransaction(transaction);
-        // Blanket Update
-        // storeReducer({
-        //     type: GlobalStoreActionType.BLANKET_UPDATE,
-        //     payload: null
-        // });
     }
 
     store.editSongTransaction = function (newSong) {
@@ -531,11 +520,6 @@ export const useGlobalStore = () => {
     store.addMoveSongTransaction = (start, end) => {
         let transaction = new MoveSong_Transaction(store, start, end);
         tps.addTransaction(transaction);
-        // Blanket Update
-        // storeReducer({
-        //     type: GlobalStoreActionType.BLANKET_UPDATE,
-        //     payload: null
-        // });
     }
 
     // THIS FUNCTION MOVES A SONG IN THE CURRENT LIST FROM
