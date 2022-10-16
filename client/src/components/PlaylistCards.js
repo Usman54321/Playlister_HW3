@@ -27,7 +27,7 @@ function PlaylistCards() {
 
     useEffect(() => {
         document.addEventListener("keydown", handleKeyPress, false);
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (!store.currentList) {
         return (
