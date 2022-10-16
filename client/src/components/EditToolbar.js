@@ -22,10 +22,10 @@ function EditToolbar() {
     //         <></>
     //     )
     // }
-    if (!store.hasList()) addSongClass += "-disabled";
-    if (!store.canUndo()) undoClass += "-disabled";
-    if (!store.canRedo()) redoClass += "-disabled";
-    if (!store.hasList()) closeClass += "-disabled";
+    if (!store.hasList() || store.hasModalOpen()) addSongClass += "-disabled";
+    if (!store.canUndo() | store.hasModalOpen()) undoClass += "-disabled";
+    if (!store.canRedo() | store.hasModalOpen()) redoClass += "-disabled";
+    if (!store.hasList() | store.hasModalOpen()) closeClass += "-disabled";
 
     function handleUndo() {
         store.undo();
@@ -38,10 +38,10 @@ function EditToolbar() {
         store.closeCurrentList();
     }
 
-    let editStatus = false;
-    if (store.isListNameEditActive) {
-        editStatus = true;
-    }
+    // let editStatus = false;
+    // if (store.isListNameEditActive) {
+    //     editStatus = true;
+    // }
 
     function handleAddSong() {
         store.addSongTransaction();
@@ -52,7 +52,7 @@ function EditToolbar() {
             <input
                 type="button"
                 id='add-song-button'
-                disabled={editStatus || !store.hasList()}
+                disabled={!store.hasList() || store.hasModalOpen()}
                 value="+"
                 className={addSongClass}
                 onClick={handleAddSong}
@@ -60,7 +60,7 @@ function EditToolbar() {
             <input
                 type="button"
                 id='undo-button'
-                disabled={editStatus || !store.canUndo()}
+                disabled={!store.canUndo() || store.hasModalOpen()}
                 value="⟲"
                 className={undoClass}
                 onClick={handleUndo}
@@ -68,7 +68,7 @@ function EditToolbar() {
             <input
                 type="button"
                 id='redo-button'
-                disabled={editStatus || !store.canRedo()}
+                disabled={!store.canRedo() || store.hasModalOpen()}
                 value="⟳"
                 className={redoClass}
                 onClick={handleRedo}
@@ -76,7 +76,7 @@ function EditToolbar() {
             <input
                 type="button"
                 id='close-button'
-                disabled={editStatus || !store.hasList()}
+                disabled={!store.hasList() || store.hasModalOpen()}
                 value="&#x2715;"
                 className={closeClass}
                 onClick={handleClose}

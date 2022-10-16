@@ -5,7 +5,13 @@ function EditSongModal() {
     const { store } = useContext(GlobalStoreContext);
 
     function editCallback() {
-        store.editSongTransaction();
+        let newSong = {
+            title: document.getElementById("eTitle").value,
+            artist: document.getElementById("eArtist").value,
+            youTubeId: document.getElementById("eID").value
+        }
+        console.log("In editCallback with newSong: " + JSON.stringify(newSong));
+        store.editSongTransaction(newSong);
     }
 
     function closeCallback() {

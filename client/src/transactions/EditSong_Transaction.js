@@ -10,10 +10,12 @@ export default class EditSong_Transaction extends jsTPS {
     }
 
     doTransaction() {
+        console.log("Changing song at index " + this.id + " to " + JSON.stringify(this.newSong) + "\nWas " + JSON.stringify(this.oldSong));
         this.store.editSong(this.id, this.newSong);
     }
 
     undoTransaction() {
+        console.log("Changing song at index " + this.id + " to " + JSON.stringify(this.oldSong) + "\nWas " + JSON.stringify(this.newSong));
         this.store.editSong(this.id, this.oldSong);
     }
 }
