@@ -53,7 +53,7 @@ export const useGlobalStore = () => {
     // HANDLE EVERY TYPE OF STATE CHANGE
     const storeReducer = (action) => {
         const { type, payload } = action;
-        console.log("storeReducer: " + type + " " + payload);
+        // console.log("storeReducer: " + type + " " + payload);
         switch (type) {
             // LIST UPDATE OF ITS NAME
             case GlobalStoreActionType.CHANGE_LIST_NAME: {
@@ -206,7 +206,7 @@ export const useGlobalStore = () => {
                     songToEdit: store.songToEdit,
                 });
             }
-            
+
             default:
                 return store;
         }
@@ -449,7 +449,7 @@ export const useGlobalStore = () => {
                 index: index,
                 song: newSong
             }
-            console.log("Editing song at index " + index + " to " + JSON.stringify(newSong));
+            // console.log("Editing song at index " + index + " to " + JSON.stringify(newSong));
             let response = await api.editSong(store.currentList._id, payload);
             if (response.data.success) {
                 store.setCurrentList(store.currentList._id);

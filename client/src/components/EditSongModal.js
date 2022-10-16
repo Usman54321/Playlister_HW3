@@ -10,7 +10,7 @@ function EditSongModal() {
             artist: document.getElementById("eArtist").value,
             youTubeId: document.getElementById("eID").value
         }
-        console.log("In editCallback with newSong: " + JSON.stringify(newSong));
+        // console.log("In editCallback with newSong: " + JSON.stringify(newSong));
         store.editSongTransaction(newSong);
     }
 
