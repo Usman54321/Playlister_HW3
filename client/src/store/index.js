@@ -4,6 +4,7 @@ import api from '../api'
 import AddSong_Transaction from '../transactions/AddSong_Transaction';
 import DeleteSong_Transaction from '../transactions/DeleteSong_Transaction';
 import MoveSong_Transaction from '../transactions/MoveSong_Transaction';
+import EditSong_Transaction from '../transactions/EditSong_Transaction';
 
 export const GlobalStoreContext = createContext({});
 /*
@@ -43,6 +44,7 @@ export const useGlobalStore = () => {
         isDragging: false,
         draggedTo: false,
         isModalOpen: false,
+        songToEdit: null,
     });
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -280,12 +282,36 @@ export const useGlobalStore = () => {
         store.isModalOpen = false;
     }
 
+    store.showEditSongModal = () => {
+        let modal = document.getElementById("edit-song-modal");
+        modal.classList.add("is-visible");
+        store.isModalOpen = true;
+    }
+
+    store.hideEditSongModal = () => {
+        let modal = document.getElementById("edit-song-modal");
+        modal.classList.remove("is-visible");
+        store.isModalOpen = false;
+        document.getElementById("eTitle").value = "";
+        document.getElementById("eArtist").value = "";
+        document.getElementById("eID").value = "";
+    }
+
     store.markSongForDeletion = (num) => {
         store.songToDelete = num;
         let song = store.currentList.songs[num];
         let name = song.title;
         document.getElementById("delete-song-span").innerHTML = name;
         store.showDeleteSongModal();
+    }
+
+    store.markSongForEdit = (num) => {
+        let song = store.currentList.songs[num];
+        document.getElementById("eTitle").value = song.title;
+        document.getElementById("eArtist").value = song.artist;
+        document.getElementById("eID").value = song.youTubeId;
+        store.songToEdit = num;
+        store.showEditSongModal();
     }
 
     // THIS FUNCTION MARKS A LIST FOR DELETION
@@ -309,6 +335,24 @@ export const useGlobalStore = () => {
         }
         asyncDeleteList(store.listToDelete);
         store.hideDeleteListModal();
+    }
+
+    // THIS FUNCTION EDITS A SONG
+    store.editSong = function (id, newSong) {
+        async function asyncEditSong(index, newSong) {
+            let payload = {
+                index: index,
+                song: newSong
+            }
+            // console.log("Editing song at index " + index + " to " + JSON.stringify(newSong));
+            let response = await api.editSong(store.currentList._id, payload);
+            if (response.data.success) {
+                store.setCurrentList(store.currentList._id);
+                store.history.push("/playlist/" + store.currentList._id);
+            }
+        }
+        asyncEditSong(id, newSong);
+        store.hideEditSongModal();
     }
 
     store.setIsListNameEditActive = function (active) {
@@ -367,6 +411,19 @@ export const useGlobalStore = () => {
             type: GlobalStoreActionType.BLANKET_UPDATE,
             payload: null
         });
+    }
+
+    store.editSongTransaction = function () {
+        let title = document.getElementById("eTitle").value;
+        let artist = document.getElementById("eArtist").value;
+        let id = document.getElementById("eID").value;
+        let newSong = {
+            title: title,
+            artist: artist,
+            youTubeId: id
+        }
+        let transaction = new EditSong_Transaction(store, store.songToEdit, newSong);
+        tps.addTransaction(transaction);
     }
 
     // THIS FUNCTION ADDS A MoveSong_Transaction TO THE TRANSACTION STACK

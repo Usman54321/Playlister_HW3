@@ -52,6 +52,7 @@ function SongCard(props) {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             draggable="true"
+            onDoubleClick={() => store.markSongForEdit(index)}
         >
             {index + 1}.
             <a

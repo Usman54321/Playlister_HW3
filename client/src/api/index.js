@@ -31,6 +31,7 @@ export const addSong = (id, payload) => api.put(`/playlist/${id}/addSong`, paylo
 export const deleteSong = (id, payload) => api.put(`/playlist/${id}/deleteSong`, payload)
 export const moveSong = (id, payload) => api.put(`/playlist/${id}/moveSong`, payload)
 export const addSongAtIndex = (id, payload) => api.put(`/playlist/${id}/addSongAtIndex`, payload)
+export const editSong = (id, payload) => api.put(`/playlist/${id}/editSong`, payload)
 
 
 const apis = {
@@ -43,7 +44,8 @@ const apis = {
     addSong,
     deleteSong,
     moveSong,
-    addSongAtIndex
+    addSongAtIndex,
+    editSong,
 }
 
 export default apis
