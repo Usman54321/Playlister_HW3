@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import SongCard from './SongCard.js'
 import { GlobalStoreContext } from '../store'
@@ -15,6 +15,20 @@ function PlaylistCards() {
     const { store } = useContext(GlobalStoreContext);
     store.history = useHistory();
 
+    function handleKeyPress(e) {
+        if ((e.key === "z" || e.key === 'Z') && e.ctrlKey) {
+            if (!store.isModalOpen)
+                store.undo();
+        } else if ((e.key === "y" || e.key === 'Y') && e.ctrlKey) {
+            if (!store.isModalOpen)
+                store.redo();
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeyPress, false);
+    }, []);
+
     if (!store.currentList) {
         return (
             <></>
@@ -27,6 +41,7 @@ function PlaylistCards() {
             <></>
         )
     }
+
 
     return (
         <div id="playlist-cards">
