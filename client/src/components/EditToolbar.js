@@ -23,9 +23,9 @@ function EditToolbar() {
     //     )
     // }
     if (!store.hasList() || store.hasModalOpen()) addSongClass += "-disabled";
-    if (!store.canUndo() | store.hasModalOpen()) undoClass += "-disabled";
-    if (!store.canRedo() | store.hasModalOpen()) redoClass += "-disabled";
-    if (!store.hasList() | store.hasModalOpen()) closeClass += "-disabled";
+    if (!store.canUndo() || store.hasModalOpen()) undoClass += "-disabled";
+    if (!store.canRedo() || store.hasModalOpen()) redoClass += "-disabled";
+    if (!store.hasList() || store.hasModalOpen()) closeClass += "-disabled";
 
     function handleUndo() {
         store.undo();
