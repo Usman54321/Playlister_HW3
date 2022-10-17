@@ -86,7 +86,7 @@ getPlaylistPairs = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
-updatePlaylist = async (req, res) => {
+updateListName = async (req, res) => {
     const body = req.body;
     if (!body) {
         return res.status(400).json({
@@ -312,7 +312,7 @@ module.exports = {
     getPlaylists,
     getPlaylistPairs,
     getPlaylistById,
-    updatePlaylist,
+    updateListName,
     deletePlaylist,
     addSong,
     deleteSong,
