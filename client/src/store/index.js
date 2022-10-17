@@ -53,7 +53,7 @@ export const useGlobalStore = () => {
     // HANDLE EVERY TYPE OF STATE CHANGE
     const storeReducer = (action) => {
         const { type, payload } = action;
-        // console.log("storeReducer: " + type + " " + payload);
+        console.log("storeReducer: " + type + " " + payload);
         switch (type) {
             // LIST UPDATE OF ITS NAME
             case GlobalStoreActionType.CHANGE_LIST_NAME: {
@@ -570,14 +570,6 @@ export const useGlobalStore = () => {
 
     store.hasModalOpen = function () {
         return store.isModalOpen;
-    }
-
-
-    store.setIsListNameEditActive = function (active) {
-        storeReducer({
-            type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
-            payload: active
-        });
     }
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
