@@ -386,10 +386,6 @@ export const useGlobalStore = () => {
             type: GlobalStoreActionType.MODAL_CHANGE,
             payload: false
         });
-        storeReducer({
-            type: GlobalStoreActionType.MARK_SONG_FOR_EDIT,
-            payload: null
-        });
         document.getElementById("eTitle").value = "";
         document.getElementById("eArtist").value = "";
         document.getElementById("eID").value = "";
@@ -576,6 +572,13 @@ export const useGlobalStore = () => {
         return store.isModalOpen;
     }
 
+
+    store.setIsListNameEditActive = function (active) {
+        storeReducer({
+            type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
+            payload: active
+        });
+    }
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
     return { store, storeReducer };
