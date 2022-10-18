@@ -27,6 +27,10 @@ function PlaylistCards() {
 
     useEffect(() => {
         document.addEventListener("keydown", handleKeyPress, false);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyPress, false);
+        }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (!store.currentList) {
