@@ -20,6 +20,7 @@ const ListSelector = () => {
     function handleCreateNewList() {
         store.createNewList();
     }
+
     let listCard = "";
     if (store) {
         listCard = store.idNamePairs.map((pair) => (
@@ -30,6 +31,10 @@ const ListSelector = () => {
             />
         ))
     }
+    let addListButtonClass = "playlister-button";
+    if (store.listNameActive === true){
+        addListButtonClass = "playlister-button-disabled";
+    }
     return (
         <div id="playlist-selector">
             <div id="list-selector-list">
@@ -39,7 +44,8 @@ const ListSelector = () => {
                         type="button"
                         id="add-list-button"
                         onClick={handleCreateNewList}
-                        className="playlister-button"
+                        className={addListButtonClass}
+                        disabled={store.listNameActive}
                         value="+" />
                 </div>
                 {
