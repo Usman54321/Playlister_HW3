@@ -16,7 +16,7 @@ function ListCard(props) {
     const { idNamePair, selected } = props;
 
     function handleLoadList(event) {
-        if (!event.target.disabled) {
+        if (!event.target.disabled && !store.listNameActive) {
             let _id = event.target.id;
             if (_id.indexOf('list-card-text-') >= 0)
                 _id = ("" + _id).substring("list-card-text-".length);
@@ -59,7 +59,7 @@ function ListCard(props) {
                 store.changeListName(id, name);
             }
             toggleEdit();
-            
+
         }
     }
 
@@ -81,6 +81,7 @@ function ListCard(props) {
     if (store.listNameActive) {
         cardStatus = true;
     }
+
     let cardElement =
         <div
             id={idNamePair._id}
