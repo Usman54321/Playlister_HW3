@@ -129,7 +129,7 @@ export const useGlobalStore = () => {
                     isDragging: false,
                     draggedTo: false,
                     songToEdit: null,
-                    isModalOpen: false,
+                    isModalOpen: true,
                 });
             }
             // UPDATE A LIST
@@ -345,10 +345,10 @@ export const useGlobalStore = () => {
     store.showDeleteListModal = () => {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.add("is-visible");
-        storeReducer({
-            type: GlobalStoreActionType.MODAL_CHANGE,
-            payload: true
-        });
+        // storeReducer({
+        //     type: GlobalStoreActionType.MODAL_CHANGE,
+        //     payload: true
+        // });
     }
 
     store.hideDeleteListModal = () => {
