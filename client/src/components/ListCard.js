@@ -10,8 +10,8 @@ import { GlobalStoreContext } from '../store'
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
-    const [ editActive, setEditActive ] = useState(false);
-    const [ text, setText ] = useState("");
+    const [editActive, setEditActive] = useState(false);
+    const [text, setText] = useState("");
     store.history = useHistory();
     const { idNamePair, selected } = props;
 
@@ -41,9 +41,25 @@ function ListCard(props) {
 
     function handleKeyPress(event) {
         if (event.code === "Enter") {
-            let id = event.target.id.substring("list-".length);
-            store.changeListName(id, text);
+            if (text.length > 0) {
+                let id = event.target.id.substring("list-".length);
+                store.changeListName(id, text);
+            }
+            else {
+                // Get the name of the list
+                let id = event.target.id.substring("list-".length);
+                // Iterate through the idNamePairs to find the name
+                let name = "";
+                for (const element of store.idNamePairs) {
+                    if (element._id === id) {
+                        name = element.name;
+                        break;
+                    }
+                }
+                store.changeListName(id, name);
+            }
             toggleEdit();
+            
         }
     }
 
