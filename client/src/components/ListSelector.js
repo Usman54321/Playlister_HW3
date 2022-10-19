@@ -36,14 +36,11 @@ const ListSelector = () => {
         addListButtonClass = "playlister-button-disabled";
     }
 
-    let deleteListModal = document.getElementById("delete-list-modal");
-    let isDeleteModalOpen = false;
-    if (deleteListModal) {
-        isDeleteModalOpen = deleteListModal.classList.contains("is-visible");
-    }
-
-    // console.log("listNameActive: " + store.listNameActive);
-    // console.log("isDeleteModalOpen: " + isDeleteModalOpen);
+    // let deleteListModal = document.getElementById("delete-list-modal");
+    // let isDeleteModalOpen = false;
+    // if (deleteListModal) {
+    //     isDeleteModalOpen = deleteListModal.classList.contains("is-visible");
+    // }
 
     return (
         <div id="playlist-selector">
@@ -55,7 +52,7 @@ const ListSelector = () => {
                         id="add-list-button"
                         onClick={handleCreateNewList}
                         className={addListButtonClass}
-                        disabled={store.listNameActive || isDeleteModalOpen}
+                        disabled={store.listNameActive || store.hasModalOpen()}
                         value="+" />
                 </div>
                 {

@@ -345,11 +345,19 @@ export const useGlobalStore = () => {
     store.showDeleteListModal = () => {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.add("is-visible");
+        storeReducer({
+            type: GlobalStoreActionType.MODAL_CHANGE,
+            payload: true
+        });
     }
 
     store.hideDeleteListModal = () => {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
+        storeReducer({
+            type: GlobalStoreActionType.MODAL_CHANGE,
+            payload: false
+        });
     }
 
     store.showDeleteSongModal = () => {
