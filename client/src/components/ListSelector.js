@@ -42,8 +42,8 @@ const ListSelector = () => {
         isDeleteModalOpen = deleteListModal.classList.contains("is-visible");
     }
 
-    console.log("listNameActive: " + store.listNameActive);
-    console.log("isDeleteModalOpen: " + isDeleteModalOpen);
+    // console.log("listNameActive: " + store.listNameActive);
+    // console.log("isDeleteModalOpen: " + isDeleteModalOpen);
 
     return (
         <div id="playlist-selector">
