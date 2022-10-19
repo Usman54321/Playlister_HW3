@@ -71,6 +71,12 @@ body {
   display: flex;
 }
 
+#list-selector-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 #playlist-selector,
 #playlist-cards {
   overflow-y: scroll;
@@ -146,6 +152,8 @@ body {
   padding: 20px;
   border-radius: 25px;
 }
+
+
 
 .list-card:aria-disabled,
 .list-card[aria-disabled] {
